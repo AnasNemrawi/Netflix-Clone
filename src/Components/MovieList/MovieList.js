@@ -1,19 +1,11 @@
 import React from 'react';
-import { Row } from 'react-bootstrap';
 import Movie from '../Movie/Movie';
-
-function MovieList({ data, updateMovie }) {
+function MovieList({ movies, setShow, setTargetMovie }) {
     return (
-        <Row>
-            {data.map((singleData) => (
-                <Movie
-                    singleData={singleData}
-                    key={singleData.id}
-                    updateMovie={updateMovie}
-                />
-            ))}
-        </Row>
-    );
+        <div className='flex flex-wrap justify-around items-center w-[100%] h-[100%]'>
+            {movies.map(movie => <Movie movie={movie} setTargetMovie={setTargetMovie} setShow={setShow} />)}
+        </div>
+    )
 }
 
-export default MovieList;
+export default MovieList
