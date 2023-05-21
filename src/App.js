@@ -1,22 +1,33 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { createRoot } from 'react-dom/client'; // Updated import
-import Home from './Components/Home/Home';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import MovieList from './Components/MovieList/MovieList'
+import ModalMovie from './Components/ModalMovie/ModalMovie';
+import Row from 'react-bootstrap/Row';
 
-function App() {
+function Home() {
+  const [trendingMovies, setTrendingMovies] = useState([]);
+  const [targetMovie, setTargetMovie] = useState({});
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  console.log(process.env)
+  function getTrending() {
+    axios.get(`${process.env.REACT_APP_URL}/trending/all/week?api_key=${process.env.REACT_APP_KEY}&language=end-US`)
+      .then(res => setTrendingMovies(res.data.results))
+      .catch(err => console.log(err));
+  }
+  useEffect(() => {
+    getTrending()
+  }, [])
   return (
-    <div className="App">
-      <h1>Wwlcome</h1>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home />} />
-        </Routes>
-      </BrowserRouter>
+    <div>
+      <Row>
+        <MovieList movies={trendingMovies} setShow={setShow} setTargetMovie={setTargetMovie} />
+        <ModalMovie handleClose={handleClose} handleShow={handleShow} show={show} targetMovie={targetMovie} />
+      </Row>
     </div>
-  );
+  )
 }
 
-createRoot(document.getElementById('root')).render(<App />); // Updated rendering
-
-export default App;
+export default Home

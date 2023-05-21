@@ -1,39 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
-import MovieList from '../MovieList/MovieList';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import MovieList from '../MovieList/MovieList'
+function Home() {
+    const [trendingMovies, setTrendingMovies] = useState([]);
+    const [targetMovie, setTargetMovie] = useState({});
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
-export default function Home() {
-    const [movieData, setMovieData] = useState([]);
-
-    const fetchData = async () => {
-        try {
-            const res = await axios.get(`${process.env.REACT_APP_MOVIE}?limit=10`);
-            setMovieData(res.data.movieData);
-        } catch (err) {
-            console.log(err);
-        }
+    console.log(process.env)
+    function getTrending() {
+        axios.get(`${process.env.REACT_APP_URL}/trending/all/week?api_key=${process.env.REACT_APP_KEY}&language=end-US`)
+            .then(res => setTrendingMovies(res.data.results))
+            .catch(err => console.log(err));
     }
-
-    function updateMovie(newMovie, id) {
-        let updatedMovie = movieData.map(movieElement => {
-            if (movieElement.id === id) {
-                movieElement.myrate = newMovie.retComment;
-                return movieElement;
-            } else {
-                return movieElement;
-            }
-        });
-        setMovieData(updatedMovie);
-    }
-
     useEffect(() => {
-        fetchData();
-    }, []);
-
+        getTrending()
+    }, [])
     return (
-        <Container>
-            {movieData.length > 0 && <MovieList data={movieData} updateMovie={updateMovie} />}
-        </Container>
-    );
+        <div>
+            <MovieList movies={trendingMovies} setShow={setShow} setTargetMovie={setTargetMovie} />
+            <ModalMovie handleClose={handleClose} handleShow={handleShow} show={show} targetMovie={targetMovie} />
+        </div>
+    )
 }
+
+export default Home

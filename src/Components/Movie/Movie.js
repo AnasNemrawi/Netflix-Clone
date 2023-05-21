@@ -1,38 +1,35 @@
-import React, { useState } from 'react'
-import ModalMovie from '../ModalMovie/ModalMovie'
-import Card from 'react-bootstrap/Card'
+import React, { useEffect, useState } from 'react'
+import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import './Movie.css'
-import { Col } from 'react-bootstrap';
-
-function Movie({ singleData, updateMovie }) {
-    const [isShowen, setIsShowen] = useState(false)
-    const handelShow = () => {
-        setIsShowen(true)
+import axios from 'axios';
+import Col from 'react-bootstrap/Col';
+function Movie({ movie, setTargetMovie, setShow }) {
+    function handleShow() {
+        setShow(true)
+        setTargetMovie(movie)
     }
-
-    const handleClose = () => {
-        setIsShowen(false)
-    }
+    // const [images,setImages]=useState([]);
+    // useEffect(()=>{
+    //   axios.get(`${process.env.REACT_APP_URL}/movie/${movie.id}/images?api_key=${process.env.REACT_APP_KEY}`)
+    //   .then(res=>console.log(res))
+    //   .catch(err=>console.log(err));
+    // },[])
     return (
-        <Col className='coll'>
+        <div className=''>
+            <Col>
+                <Card className='' style={{ width: '18rem' }}>
+                    <Card.Body>
+                        <Card.Title>{movie.title}</Card.Title>
+                        <Card.Text>
+                            {movie.overview.slice(0, 75)}
+                        </Card.Text>
+                        <Button variant="primary" onClick={() => handleShow()}>Add to favorite</Button>
+                    </Card.Body>
+                </Card>
+            </Col>
+        </div>
 
 
-            <Card className='thecard' style={{ width: '22rem' }}>
-                <Card.Img className='cardImg' variant="top" src={`https://image.tmdb.org/t/p/w200/${singleData.poster_path}`} />
-                <Card.Body>
-                    <Card.Title>{singleData.title}</Card.Title>
-                    <Card.Text>
-                        {singleData.overview}
-                    </Card.Text>
-                    <Button variant="info" onClick={handelShow} >See Details</Button>
-                </Card.Body>
-            </Card>
-            {
-                singleData && < ModalMovie singleData={singleData} show={isShowen} handleClose={handleClose} updateMovie={updateMovie} />
-            }
-
-        </Col>
     )
 }
 
