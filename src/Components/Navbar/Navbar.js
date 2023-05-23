@@ -1,9 +1,19 @@
 import React from 'react'
+import { Container, Nav, Navbar } from 'react-bootstrap'
 
-export default function Navbar() {
+function NavBar() {
     return (
-        <div>
-            <h1>navbar</h1>
-        </div>
+        <Navbar bg="dark" variant="dark">
+            <Container>
+                <Navbar.Brand href="/">Netflix </Navbar.Brand>
+                <Nav className="me-auto">
+                    <Nav.Link href="/">Home</Nav.Link>
+                    <Nav.Link href="/FavList">Favorite List</Nav.Link>
+
+                </Nav>
+            </Container>
+        </Navbar>
     )
 }
+
+export default NavBar
