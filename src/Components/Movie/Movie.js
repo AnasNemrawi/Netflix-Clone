@@ -41,3 +41,4 @@ function Movie({ movie, setTargetMovie, setShow }) {
 }
 
 export default Movie;
+
