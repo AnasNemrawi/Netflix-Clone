@@ -3,7 +3,6 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 
 function Movie({ movie, setTargetMovie, setShow }) {
     function handleShow() {
@@ -42,3 +41,4 @@ function Movie({ movie, setTargetMovie, setShow }) {
 }
 
 export default Movie;
+
