@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import MovieList from '../MovieList/MovieList'
+import ModalMovie from '../ModalMovie/ModalMovie'
+
+
 function Home() {
     const [trendingMovies, setTrendingMovies] = useState([]);
     const [targetMovie, setTargetMovie] = useState({});
