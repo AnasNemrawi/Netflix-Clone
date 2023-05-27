@@ -6,15 +6,22 @@ import axios from 'axios';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 
-function ModalMovie({ targetMovie, handleClose, handleShow, show }) {
-    const [inputValue, setInputValue] = useState("")
-    function handleAddToDatabase() {
+function ModalMovie({ targetMovie, handleClose, handleShow, show, onFav }) {
+    const [inputValue, setInputValue] = useState("");
+    function handleAddToDatabase(e) {
+        e.preventDefault();
         handleClose();
-        axios.post(`${process.env.REACT_APP_DATABASE}`, inputValue)
+        axios.post(`https://moviesapi-5cja.onrender.com/movies`, targetMovie)
             .then(res => console.log(res))
             .catch(err => console.log(err))
     };
-    console.log(inputValue)
+
+    function handleUpdate(e) {
+        e.preventDefault()
+        axios.put(`https://moviesapi-5cja.onrender.com/${targetMovie.id}`, e.target.comment)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+    }
     return (
         <div
             className="modal show"
@@ -23,29 +30,56 @@ function ModalMovie({ targetMovie, handleClose, handleShow, show }) {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{targetMovie.title}</Modal.Title>
+                    <img className='w-[100%] h-[400px]' src={`http://image.tmdb.org/t/p/w500/${targetMovie.poster_path}`} alt="movie IMG" />
                 </Modal.Header>
                 <Modal.Body>
+                    <Modal.Title>{targetMovie.title}</Modal.Title>
                     {targetMovie.overview}
                 </Modal.Body>
-                <InputGroup className="mb-3">
-                    <InputGroup.Text id="inputGroup-sizing-default" value={(e) => setInputValue(e.target.value)}
-                    >
-                        Comment
-                    </InputGroup.Text>
-                    <Form.Control
-                        aria-label="Comment"
-                        aria-describedby="inputGroup-sizing-default"
-                    />
-                </InputGroup>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={() => handleAddToDatabase()}>
-                        Add to database
-                    </Button>
-                </Modal.Footer>
+                {onFav ?
+                    <Form onSubmit={(e) => handleUpdate(e)}>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text id="inputGroup-sizing-default" onChange={(e) => setInputValue(e.target.value)}
+                            >
+                                Comment
+                            </InputGroup.Text>
+                            <Form.Control
+                                aria-label="Comment"
+                                aria-describedby="inputGroup-sizing-default"
+                            />
+                        </InputGroup>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                            <Button variant="primary" >
+                                Update Comment
+                            </Button>
+                        </Modal.Footer>
+                    </Form>
+                    :
+                    <Form onSubmit={(e) => handleAddToDatabase(e)}>
+                        <InputGroup className="mb-3">
+                            <InputGroup.Text id="inputGroup-sizing-default" onChange={(e) => setInputValue(e.target.value)}
+                            >
+                                Comment
+                            </InputGroup.Text>
+                            <Form.Control
+                                aria-label="Comment"
+                                aria-describedby="inputGroup-sizing-default"
+                            />
+                        </InputGroup>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                            <Button variant="primary" type='submit' >
+                                Add to Favorite list
+                            </Button>
+                        </Modal.Footer>
+                    </Form>
+                }
+
             </Modal>
         </div>
     );
