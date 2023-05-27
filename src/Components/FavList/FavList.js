@@ -90,4 +90,3 @@ function Favlist() {
 }
 
 export default Favlist;
-
