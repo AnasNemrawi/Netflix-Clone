@@ -5,9 +5,9 @@ function NavBar() {
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="/">Netflix </Navbar.Brand>
+                <Navbar.Brand href="/movieList">Netflix </Navbar.Brand>
                 <Nav className="me-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
+                    <Nav.Link href="/movieList">Home</Nav.Link>
                     <Nav.Link href="/FavList">Favorite List</Nav.Link>
 
                 </Nav>

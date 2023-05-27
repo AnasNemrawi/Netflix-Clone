@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import MovieList from '../MovieList/MovieList'
-import ModalMovie from '../ModalMovie/ModalMovie'
+import React, { useEffect, useState } from 'react';
+import Movie from '../Movie/Movie';
+import axios from 'axios';
+import ModalMovie from '../ModalMovie/ModalMovie';
 
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function Home() {
     const [trendingMovies, setTrendingMovies] = useState([]);
@@ -11,21 +14,73 @@ function Home() {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    console.log(process.env)
     function getTrending() {
-        axios.get(`${process.env.REACT_APP_URL}/trending/all/week?api_key=${process.env.REACT_APP_KEY}&language=end-US`)
-            .then(res => setTrendingMovies(res.data.results))
-            .catch(err => console.log(err));
+        axios
+            .get('https://moviesapi-5cja.onrender.com/trending')
+            .then((res) => res.data)
+            .then((data) => setTrendingMovies(data.results))
+            .catch((err) => console.log(err));
     }
+
     useEffect(() => {
-        getTrending()
-    }, [])
+        getTrending();
+    }, []);
+
     return (
-        <div>
-            <MovieList movies={trendingMovies} setShow={setShow} setTargetMovie={setTargetMovie} />
-            <ModalMovie handleClose={handleClose} handleShow={handleShow} show={show} targetMovie={targetMovie} />
-        </div>
-    )
+        <Container>
+            {trendingMovies.map((movie, index) => (
+                (index % 4 === 0) && (
+                    <Row key={`row-${index / 4}`}>
+                        <Col md={3}>
+                            <Movie
+                                movie={movie}
+                                setTargetMovie={setTargetMovie}
+                                setShow={setShow}
+                                key={movie.id}
+                            />
+                        </Col>
+                        {trendingMovies[index + 1] && (
+                            <Col md={3}>
+                                <Movie
+                                    movie={trendingMovies[index + 1]}
+                                    setTargetMovie={setTargetMovie}
+                                    setShow={setShow}
+                                    key={trendingMovies[index + 1].id}
+                                />
+                            </Col>
+                        )}
+                        {trendingMovies[index + 2] && (
+                            <Col md={3}>
+                                <Movie
+                                    movie={trendingMovies[index + 2]}
+                                    setTargetMovie={setTargetMovie}
+                                    setShow={setShow}
+                                    key={trendingMovies[index + 2].id}
+                                />
+                            </Col>
+                        )}
+                        {trendingMovies[index + 3] && (
+                            <Col md={3}>
+                                <Movie
+                                    movie={trendingMovies[index + 3]}
+                                    setTargetMovie={setTargetMovie}
+                                    setShow={setShow}
+                                    key={trendingMovies[index + 3].id}
+                                />
+                            </Col>
+                        )}
+                    </Row>
+                )
+            ))}
+            <ModalMovie
+                handleClose={handleClose}
+                handleShow={handleShow}
+                show={show}
+                targetMovie={targetMovie}
+            />
+        </Container>
+    );
 }
 
-export default Home
+export default Home;
+
